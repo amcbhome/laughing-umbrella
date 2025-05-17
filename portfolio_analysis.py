@@ -36,10 +36,21 @@ def calculate_portfolio(data, weights):
 
 def plot_efficient_frontier(results_df):
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.scatter(results_df['Risk (Std Dev)'], results_df['Return'], color='blue')
+
+    # Ensure correct order of points from A to F
+    results_df_sorted = results_df.sort_values('Portfolio')
+
+    x = results_df_sorted['Risk (Std Dev)']
+    y = results_df_sorted['Return']
+
+    # Plot points
+    ax.scatter(x, y, color='blue', zorder=5)
+
+    # Plot line through the points A to F
+    ax.plot(x, y, color='red', linestyle='--', marker='o', zorder=4)
 
     # Annotate each point with its Portfolio label
-    for _, row in results_df.iterrows():
+    for _, row in results_df_sorted.iterrows():
         ax.annotate(row['Portfolio'],
                     (row['Risk (Std Dev)'], row['Return']),
                     textcoords="offset points",
