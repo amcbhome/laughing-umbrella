@@ -56,5 +56,19 @@ def main():
             st.write(f"Population Std Dev of Y: {std_y:.2f}")
             st.write(f"Pearson Correlation Coefficient: {corr:.2f}")
 
-            weights = [0.0, 0.2, 0.]()
+            weights = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+            results_df = calculate_portfolio(data, weights)
 
+            st.subheader("📌 Efficient Frontier Results")
+            st.dataframe(results_df.style.format({
+                'Weight_X': '{:.2f}', 
+                'Weight_Y': '{:.2f}', 
+                'Return': '{:.2f}', 
+                'Risk (Std Dev)': '{:.2f}'
+            }), use_container_width=True)
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
