@@ -3,6 +3,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 def calculate_statistics(data):
     mean_x = data['X'].mean()
@@ -32,6 +33,26 @@ def calculate_portfolio(data, weights):
         })
 
     return pd.DataFrame(results)
+
+def plot_efficient_frontier(results_df):
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.scatter(results_df['Risk (Std Dev)'], results_df['Return'], color='blue')
+
+    # Annotate each point with its Portfolio label
+    for _, row in results_df.iterrows():
+        ax.annotate(row['Portfolio'],
+                    (row['Risk (Std Dev)'], row['Return']),
+                    textcoords="offset points",
+                    xytext=(5, 5),
+                    ha='center',
+                    fontsize=9,
+                    weight='bold')
+
+    ax.set_title('Efficient Frontier')
+    ax.set_xlabel('Risk (Standard Deviation)')
+    ax.set_ylabel('Expected Return')
+    ax.grid(True)
+    st.pyplot(fig)
 
 def main():
     st.title("📈 Portfolio Efficient Frontier Calculator")
@@ -66,6 +87,9 @@ def main():
                 'Return': '{:.2f}', 
                 'Risk (Std Dev)': '{:.2f}'
             }), use_container_width=True)
+
+            st.subheader("📉 Efficient Frontier Plot")
+            plot_efficient_frontier(results_df)
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
