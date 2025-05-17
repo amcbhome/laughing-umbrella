@@ -25,17 +25,17 @@ def calculate_portfolio(data, weights):
         portfolio_risk = np.sqrt(portfolio_variance)
         results.append({
             'Portfolio': chr(65 + i),  # A, B, C, D, E, F
-            'Weight_X': round(w_x, 1),
-            'Weight_Y': round(w_y, 1),
-            'Return': round(portfolio_return, 4),
-            'Risk (Std Dev)': round(portfolio_risk, 4)
+            'Weight_X': round(w_x, 2),
+            'Weight_Y': round(w_y, 2),
+            'Return': round(portfolio_return, 2),
+            'Risk (Std Dev)': round(portfolio_risk, 2)
         })
 
     return pd.DataFrame(results)
 
 def main():
-    st.title("Portfolio Efficient Frontier Calculator")
-    st.write("Upload a CSV file with historical data columns named 'X' and 'Y'.")
+    st.title("📈 Portfolio Efficient Frontier Calculator")
+    st.write("Upload a CSV file with historical data columns named **'X'** and **'Y'**.")
 
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
@@ -49,21 +49,12 @@ def main():
 
             mean_x, mean_y, std_x, std_y, corr = calculate_statistics(data)
 
-            st.subheader("Basic Statistics")
-            st.write(f"Mean of X: {mean_x:.4f}")
-            st.write(f"Mean of Y: {mean_y:.4f}")
-            st.write(f"Population Std Dev of X: {std_x:.4f}")
-            st.write(f"Population Std Dev of Y: {std_y:.4f}")
-            st.write(f"Pearson Correlation Coefficient: {corr:.4f}")
+            st.subheader("📊 Basic Statistics")
+            st.write(f"Mean of X: {mean_x:.2f}")
+            st.write(f"Mean of Y: {mean_y:.2f}")
+            st.write(f"Population Std Dev of X: {std_x:.2f}")
+            st.write(f"Population Std Dev of Y: {std_y:.2f}")
+            st.write(f"Pearson Correlation Coefficient: {corr:.2f}")
 
-            weights = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            results_df = calculate_portfolio(data, weights)
+            weights = [0.0, 0.2, 0.]()
 
-            st.subheader("Efficient Frontier Results")
-            st.dataframe(results_df, use_container_width=True)
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
