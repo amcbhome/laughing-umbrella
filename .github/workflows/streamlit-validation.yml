@@ -1,0 +1,38 @@
+name: Validate Streamlit Script
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint Python Code
+        run: |
+          pip install flake8
+          flake8 . --exclude .venv,__pycache__,.git
+
+      - name: Run Streamlit Script (Headless Test)
+        run: |
+          # Start Streamlit in headless mode to check for errors
+          streamlit run portfolio_analysis.py --server.headless true &
+          sleep 10
+          # Kill the Streamlit process after verification
+          pkill -f streamlit
